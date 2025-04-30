@@ -1,1 +1,179 @@
 
+public class Album2 {
+    private String name;
+    private String condition;
+    private InvIndexPhotoManager manager;
+
+    public Album2(String name, String condition, InvIndexPhotoManager manager) {
+        this.name = name;
+        this.condition = condition;
+        this.manager = manager;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public InvIndexPhotoManager getManager() {
+        return manager;
+    }
+
+    public MyLinkedList<Photo> getPhotos() {
+        MyLinkedList<Photo> result = new MyLinkedList<>();
+        MyLinkedList<Photo> alreadyAdded = new MyLinkedList<>();
+
+        boolean isEmpty = true;
+        for (int i = 0; i < condition.length(); i++) {
+            if (condition.charAt(i) != ' ') {
+                isEmpty = false;
+                break;
+            }
+        }
+
+        String[] requiredTags;
+        if (isEmpty) {
+            requiredTags = new String[0];
+        } else {
+            requiredTags = condition.split("AND");
+        }
+
+        MyLinkedList<Photo> filteredPhotos = getPhotosFromTags(requiredTags);
+
+        MyLinkedList.Node<Photo> current = filteredPhotos.getHead();
+        while (current != null) {
+            Photo photo = current.data;
+            boolean match = true;
+
+            for (int i = 0; i < requiredTags.length; i++) {
+                String tag = requiredTags[i];
+                String cleanedTag = cleanSpaces(tag);
+
+                boolean found = false;
+                MyLinkedList.Node<String> tagNode = photo.getTags().getHead();
+                while (tagNode != null) {
+                    if (tagNode.data.equals(cleanedTag)) {
+                        found = true;
+                        break;
+                    }
+                    tagNode = tagNode.next;
+                }
+                if (!found) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match && !alreadyInList(alreadyAdded, photo)) {
+                result.insert(photo);
+                alreadyAdded.insert(photo);
+            }
+
+            current = current.next;
+        }
+        return result;
+    }
+
+    private MyLinkedList<Photo> getPhotosFromTags(String[] requiredTags) {
+        MyLinkedList<Photo> photos = new MyLinkedList<>();
+        for (int i = 0; i < requiredTags.length; i++) {
+            String cleanedTag = cleanSpaces(requiredTags[i]);
+            MyLinkedList<Photo> tagPhotos = manager.getPhotos().search(cleanedTag);
+            if (tagPhotos != null) {
+                MyLinkedList.Node<Photo> current = tagPhotos.getHead();
+                while (current != null) {
+                    photos.insert(current.data);
+                    current = current.next;
+                }
+            }
+        }
+        return photos;
+    }
+
+    public int getNbComps() {
+        int comps = 0;
+
+        boolean isEmpty = true;
+        for (int i = 0; i < condition.length(); i++) {
+            if (condition.charAt(i) != ' ') {
+                isEmpty = false;
+                break;
+            }
+        }
+
+        String[] requiredTags;
+        if (isEmpty) {
+            requiredTags = new String[0];
+        } else {
+            requiredTags = condition.split("AND");
+        }
+
+        MyLinkedList<Photo> filteredPhotos = getPhotosFromTags(requiredTags);
+
+        MyLinkedList.Node<Photo> current = filteredPhotos.getHead();
+        MyLinkedList<Photo> alreadyCounted = new MyLinkedList<>();
+        while (current != null) {
+            Photo photo = current.data;
+
+            boolean already = alreadyInList(alreadyCounted, photo);
+            if (!already) {
+                alreadyCounted.insert(photo);
+
+                for (int i = 0; i < requiredTags.length; i++) {
+                    comps++;
+                    String tag = requiredTags[i];
+                    String cleanedTag = cleanSpaces(tag);
+
+                    boolean found = false;
+                    MyLinkedList.Node<String> tagNode = photo.getTags().getHead();
+                    while (tagNode != null) {
+                        if (tagNode.data.equals(cleanedTag)) {
+                            found = true;
+                            break;
+                        }
+                        tagNode = tagNode.next;
+                    }
+                    if (!found) {
+                        break;
+                    }
+                }
+            }
+
+            current = current.next;
+        }
+        return comps;
+    }
+
+    private boolean alreadyInList(MyLinkedList<Photo> list, Photo photo) {
+        MyLinkedList.Node<Photo> current = list.getHead();
+        while (current != null) {
+            if (current.data.getPath().equals(photo.getPath())) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    private String cleanSpaces(String str) {
+        int start = 0;
+        int end = str.length() - 1;
+
+        while (start <= end && str.charAt(start) == ' ') {
+            start++;
+        }
+        while (end >= start && str.charAt(end) == ' ') {
+            end--;
+        }
+
+        String cleaned = "";
+        for (int i = start; i <= end; i++) {
+            cleaned = cleaned + str.charAt(i);
+        }
+        return cleaned;
+    }
+}
+
