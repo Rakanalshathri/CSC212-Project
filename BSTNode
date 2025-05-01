@@ -1,1 +1,15 @@
+// Node class for the Binary Search Tree
+public class BSTNode<T> {
+    String key;
+    T value;
+    BSTNode<T> left;
+    BSTNode<T> right;
+
+    public BSTNode(String key, T value) {
+        this.key = key;
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+}
 
