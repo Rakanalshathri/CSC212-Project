@@ -1,1 +1,122 @@
+public class BST<T> {
+    private BSTNode<T> root;
+    private BSTNode<T> current;
+
+    public BST() {
+        root = null;
+        current = null;
+    }
+
+    public boolean empty() {
+        return root == null;
+    }
+
+    private boolean findKey(String k) {
+        BSTNode<T> p = root;
+        BSTNode<T> q = root;
+
+        if (empty()) {
+            return false;
+        }
+
+        while (p != null) {
+            q = p;
+            int cmp = k.compareTo(p.key);
+            if (cmp == 0) {
+                current = p;
+                return true;
+            } else if (cmp < 0) {
+                p = p.left;
+            } else {
+                p = p.right;
+            }
+        }
+
+        current = q;
+        return false;
+    }
+
+    public boolean insert(String k, T val) {
+        BSTNode<T> p, q;
+        q = current;
+
+        if (findKey(k)) {
+            current = q;
+            return false;
+        }
+
+        p = new BSTNode<>(k, val);
+
+        if (empty()) {
+            root = p;
+            current = p;
+            return true;
+        } else {
+            int cmp = k.compareTo(current.key);
+            if (cmp < 0) {
+                current.left = p;
+            } else {
+                current.right = p;
+            }
+            current = p;
+            return true;
+        }
+    }
+
+    public T search(String k) {
+        BSTNode<T> p = root;
+
+        while (p != null) {
+            int cmp = k.compareTo(p.key);
+            if (cmp == 0) {
+                return p.value;
+            } else if (cmp < 0) {
+                p = p.left;
+            } else {
+                p = p.right;
+            }
+        }
+
+        return null;
+    }
+
+    public void deleteKey(String k) {
+        root = deleteRec(root, k);
+    }
+
+    private BSTNode<T> deleteRec(BSTNode<T> node, String k) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = k.compareTo(node.key);
+
+        if (cmp < 0) {
+            node.left = deleteRec(node.left, k);
+        } else if (cmp > 0) {
+            node.right = deleteRec(node.right, k);
+        } else {
+            if (node.left == null) return node.right;
+            if (node.right == null) return node.left;
+
+            BSTNode<T> minNode = findMin(node.right);
+            node.key = minNode.key;
+            node.value = minNode.value;
+            node.right = deleteRec(node.right, minNode.key);
+        }
+
+        return node;
+    }
+
+    private BSTNode<T> findMin(BSTNode<T> node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
+    public BSTNode<T> getRoot() {
+        return root;
+    }
+}
 
