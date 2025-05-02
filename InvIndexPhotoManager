@@ -1,1 +1,63 @@
+public class InvIndexPhotoManager {
+    private BST<MyLinkedList<Photo>> index;
 
+    public InvIndexPhotoManager() {
+        index = new BST<>();
+    }
+
+    public void addPhoto(Photo p) {
+        MyLinkedList<String> tags = p.getTags();
+        MyLinkedList.Node<String> current = tags.getHead();
+
+        while (current != null) {
+            String tag = current.data;
+            MyLinkedList<Photo> photosList = index.search(tag);
+
+            if (photosList == null) {
+                photosList = new MyLinkedList<>();
+                index.insert(tag, photosList);
+            }
+
+            photosList.insert(p);
+            current = current.next;
+        }
+    }
+
+    public void deletePhoto(String path) {
+        deletePhotoFromBST(index.getRoot(), path);
+    }
+
+    private void deletePhotoFromBST(BSTNode<MyLinkedList<Photo>> node, String path) {
+        if (node == null) {
+            return;
+        }
+
+        removeFromList(node.value, path);
+
+        
+        if (node.value.getHead() == null) {
+            index.deleteKey(node.key);
+        }
+
+        deletePhotoFromBST(node.left, path);
+        deletePhotoFromBST(node.right, path);
+    }
+
+    private void removeFromList(MyLinkedList<Photo> list, String path) {
+        MyLinkedList<Photo> newList = new MyLinkedList<>();
+        MyLinkedList.Node<Photo> current = list.getHead();
+
+        while (current != null) {
+            if (!current.data.getPath().equals(path)) {
+                newList.insert(current.data);
+            }
+            current = current.next;
+        }
+
+        list.head = newList.getHead();
+    }
+
+    public BST<MyLinkedList<Photo>> getPhotos() {
+        return index;
+    }
+}
