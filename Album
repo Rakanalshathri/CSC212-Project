@@ -1,4 +1,4 @@
-//Album for phase 1
+// Album for phase 1
 public class Album {
     private String name;
     private String condition;
@@ -10,18 +10,22 @@ public class Album {
         this.manager = manager;
     }
 
+    // Returns the name of the album
     public String getName() {
         return name;
     }
 
+    // Returns the search condition used to filter photos
     public String getCondition() {
         return condition;
     }
 
+    // Returns the PhotoManager associated with this album
     public PhotoManager getManager() {
         return manager;
     }
 
+    // Returns a list of photos that match all the tags specified in the album's condition
     public MyLinkedList<Photo> getPhotos() {
         MyLinkedList<Photo> result = new MyLinkedList<>();
 
@@ -72,6 +76,7 @@ public class Album {
         return result;
     }
 
+    // Returns the number of tag comparisons made during the photo filtering process
     public int getNbComps() {
         int comps = 0;
 
@@ -116,6 +121,7 @@ public class Album {
         return comps;
     }
 
+    //removes leading and trailing spaces from a tag string
     private String cleanSpaces(String str) {
         int start = 0;
         int end = str.length() - 1;
@@ -135,4 +141,3 @@ public class Album {
         return cleaned;
     }
 }
-
