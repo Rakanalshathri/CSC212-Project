@@ -1,1 +1,18 @@
 
+public class Photo {
+    private String path;
+    private MyLinkedList<String> tags;
+
+    public Photo(String path, MyLinkedList<String> tags) {
+        this.path = path;
+        this.tags = tags;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public MyLinkedList<String> getTags() {
+        return tags;
+    }
+}
