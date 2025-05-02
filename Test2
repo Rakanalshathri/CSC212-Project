@@ -32,5 +32,35 @@ public class Test2 {
         }
 
         System.out.println("Number of comparisons made: " + album.getNbComps());
+        
+        Photo p4 = new Photo("/img4.jpg", toTags("bear"));
+        Photo p5 = new Photo("/img5.jpg", toTags("beach"));
+        Photo p6 = new Photo("/img6.jpg", toTags("bee"));
+
+        manager.addPhoto(p4);
+        manager.addPhoto(p5);
+        manager.addPhoto(p6);
+
+        System.out.println("\nTesting BST full string comparison:");
+        printSearchResult(manager, "bear");
+        printSearchResult(manager, "beach");
+        printSearchResult(manager, "bee");
     }
-}
+
+    private static MyLinkedList<String> toTags(String tag) {
+        MyLinkedList<String> list = new MyLinkedList<>();
+        list.insert(tag);
+        return list;
+    }
+
+    private static void printSearchResult(InvIndexPhotoManager manager, String tag) {
+        MyLinkedList<Photo> result = manager.getPhotos().search(tag);
+        if (result != null && result.getHead() != null) {
+            System.out.println("Search for '" + tag + "': " + result.getHead().data.getPath());
+        } else {
+            System.out.println("Search for '" + tag + "': No result found");
+        }
+    }
+
+    }
+
