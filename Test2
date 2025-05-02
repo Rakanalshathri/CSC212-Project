@@ -1,0 +1,36 @@
+public class Test2 {
+    public static void main(String[] args) {
+        MyLinkedList<String> tags1 = new MyLinkedList<>();
+        tags1.insert("beach");
+        tags1.insert("sunset");
+
+        MyLinkedList<String> tags2 = new MyLinkedList<>();
+        tags2.insert("mountain");
+        tags2.insert("sunset");
+
+        MyLinkedList<String> tags3 = new MyLinkedList<>();
+        tags3.insert("beach");
+        tags3.insert("family");
+
+        Photo p1 = new Photo("/img1.jpg", tags1);
+        Photo p2 = new Photo("/img2.jpg", tags2);
+        Photo p3 = new Photo("/img3.jpg", tags3);
+
+        InvIndexPhotoManager manager = new InvIndexPhotoManager();
+        manager.addPhoto(p1);
+        manager.addPhoto(p2);
+        manager.addPhoto(p3);
+
+        Album2 album = new Album2("Beach Sunset Album", "beach AND sunset", manager);
+        MyLinkedList<Photo> photos = album.getPhotos();
+
+        System.out.println("Photos in Album 'Beach Sunset Album':");
+        MyLinkedList.Node<Photo> node = photos.getHead();
+        while (node != null) {
+            System.out.println(node.data.getPath());
+            node = node.next;
+        }
+
+        System.out.println("Number of comparisons made: " + album.getNbComps());
+    }
+}
