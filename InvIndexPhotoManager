@@ -5,6 +5,7 @@ public class InvIndexPhotoManager {
         index = new BST<>();
     }
 
+    // Adds a photo under each of its tags in the BST
     public void addPhoto(Photo p) {
         MyLinkedList<String> tags = p.getTags();
         MyLinkedList.Node<String> current = tags.getHead();
@@ -23,10 +24,12 @@ public class InvIndexPhotoManager {
         }
     }
 
+    // Removes a photo (by path) from all tag lists and deletes tags that become empty
     public void deletePhoto(String path) {
         deletePhotoFromBST(index.getRoot(), path);
     }
 
+    // Recursively removes the photo from all tag-linked lists in the BST
     private void deletePhotoFromBST(BSTNode<MyLinkedList<Photo>> node, String path) {
         if (node == null) {
             return;
@@ -34,7 +37,6 @@ public class InvIndexPhotoManager {
 
         removeFromList(node.value, path);
 
-        
         if (node.value.getHead() == null) {
             index.deleteKey(node.key);
         }
@@ -43,6 +45,7 @@ public class InvIndexPhotoManager {
         deletePhotoFromBST(node.right, path);
     }
 
+    // Reconstructs the linked list without the photo that matches the given path
     private void removeFromList(MyLinkedList<Photo> list, String path) {
         MyLinkedList<Photo> newList = new MyLinkedList<>();
         MyLinkedList.Node<Photo> current = list.getHead();
@@ -57,6 +60,7 @@ public class InvIndexPhotoManager {
         list.head = newList.getHead();
     }
 
+    // Returns the BST that maps tags to lists of photos
     public BST<MyLinkedList<Photo>> getPhotos() {
         return index;
     }
