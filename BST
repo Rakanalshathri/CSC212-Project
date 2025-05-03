@@ -7,10 +7,12 @@ public class BST<T> {
         current = null;
     }
 
+    // Returns true if the tree is empty
     public boolean empty() {
         return root == null;
     }
 
+    // Finds a node by key and updates the current pointer
     private boolean findKey(String k) {
         BSTNode<T> p = root;
         BSTNode<T> q = root;
@@ -36,6 +38,7 @@ public class BST<T> {
         return false;
     }
 
+    // Inserts a key-value pair into the BST
     public boolean insert(String k, T val) {
         BSTNode<T> p, q;
         q = current;
@@ -63,6 +66,7 @@ public class BST<T> {
         }
     }
 
+    // Searches for a key and returns its value
     public T search(String k) {
         BSTNode<T> p = root;
 
@@ -80,10 +84,12 @@ public class BST<T> {
         return null;
     }
 
+    // Deletes a key from the BST
     public void deleteKey(String k) {
         root = deleteRec(root, k);
     }
 
+    // Recursively deletes a node with the given key
     private BSTNode<T> deleteRec(BSTNode<T> node, String k) {
         if (node == null) {
             return null;
@@ -108,6 +114,7 @@ public class BST<T> {
         return node;
     }
 
+    // Finds the node with the minimum key in a subtree
     private BSTNode<T> findMin(BSTNode<T> node) {
         while (node.left != null) {
             node = node.left;
@@ -115,8 +122,8 @@ public class BST<T> {
         return node;
     }
 
+    // Returns the root node of the BST
     public BSTNode<T> getRoot() {
         return root;
     }
 }
-
