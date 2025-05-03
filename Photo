@@ -7,10 +7,12 @@ public class Photo {
         this.tags = tags;
     }
 
+    // Returns the photo’s file path
     public String getPath() {
         return path;
     }
 
+    // Returns the list of tags associated with the photo
     public MyLinkedList<String> getTags() {
         return tags;
     }
