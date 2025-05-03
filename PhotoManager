@@ -5,14 +5,17 @@ public class PhotoManager {
         photos = new MyLinkedList<>();
     }
 
+    // Returns the list of all stored photos
     public MyLinkedList<Photo> getPhotos() {
         return photos;
     }
 
+    // Adds a photo to the head of the list
     public void addPhoto(Photo p) {
         photos.insert(p);
     }
 
+    // Deletes a photo by path by building a new list without that photo
     public void deletePhoto(String path) {
         MyLinkedList<Photo> newPhotos = new MyLinkedList<>();
         MyLinkedList.Node<Photo> current = photos.getHead();
@@ -25,4 +28,3 @@ public class PhotoManager {
         photos = newPhotos;
     }
 }
-
